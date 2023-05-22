@@ -19,7 +19,7 @@ test_mini.o: test_mini.c
 	gcc -c test_mini.c
 
 test$(EXECUTABLE_EXTENSION): test.o libtest-mini$(LIBRARY_EXTENSION)
-	gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main -o test$(EXECUTABLE_EXTENSION) test.o -L ./ -ltest-mini
+	gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main -o test$(EXECUTABLE_EXTENSION) test.o -L./ -ltest-mini
 
 test.o: test.c
 	gcc -c test.c
