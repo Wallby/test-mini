@@ -121,7 +121,7 @@ int tm_test(int a, int(*b)(), int numRepetitions)
 		size_t numBytesLeakedByTest = numBytesAllocatedAfterTest - numBytesAllocatedBeforeTest;
 		if(numBytesAllocatedAfterTest != numBytesAllocatedBeforeTest)
 		{
-			fprintf(stderr, "error: test %i leaked %zi bytes of memory %i%s time\n", numBytesLeakedByTest, a, i + 1, TM_ORDINAL_NUMBER_SUFFIX(i+1));
+			fprintf(stderr, "error: test %i leaked %zi bytes of memory %i%s time\n", a, numBytesLeakedByTest, i + 1, TM_ORDINAL_NUMBER_SUFFIX(i+1));
 			return 0;
 		}
 	}
