@@ -18,16 +18,7 @@ libtest-mini$(LIBRARY_EXTENSION): test_mini.o
 test_mini.o: test_mini.c
 	gcc -c test_mini.c
 
-test$(EXECUTABLE_EXTENSION): test.o libtest-mini$(LIBRARY_EXTENSION)
-	gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main -o test$(EXECUTABLE_EXTENSION) test.o -L./ -ltest-mini
-
-test.o: test.c
-	gcc -c test.c
-
 #******************************************************************************
-
-release: test$(EXECUTABLE_EXTENSION)
-	./test$(EXECUTABLE_EXTENSION)
 
 # don't associate clean with a file with filename "clean"
 # v
@@ -36,7 +27,3 @@ clean:
 	$(call RM,test_mini.o)
 	$(call RM,libtest_mini.a)
 	$(call RM,libtest_mini.lib)
-	
-	$(call RM,test.o)
-	$(call RM,test)
-	$(call RM,test.exe)
