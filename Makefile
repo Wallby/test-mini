@@ -34,8 +34,8 @@ release: test$(EXECUTABLE_EXTENSION)
 .PHONY: clean
 clean:
 	$(call RM,test_mini.o)
-	$(call RM,libtest_mini.a)
-	$(call RM,libtest_mini.lib)
+	$(call RM,libtest-mini.a)
+	$(call RM,libtest-mini.lib)
 	
 	$(call RM,test.o)
 	$(call RM,test)
