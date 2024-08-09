@@ -1,7 +1,7 @@
 #ifndef TEST_MINI_H
 #define TEST_MINI_H
 
-#define TEST_MINI_VERSION 0.1
+#define TEST_MINI_VERSION 0.1.1
 
 
 // NOTE: link with "gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main"
