@@ -2,7 +2,8 @@
 #define TEST_MINI_H
 
 
-// NOTE: link with "gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main"
+// NOTE: if chromeos.. link with "gcc..
+//       .. -Wl,--wrap=malloc,--wrap=free,--wrap=main"
 
 // NOTE: for 11/12/13.. th (exceptions)
 //       for 1,21,31,etc... st
