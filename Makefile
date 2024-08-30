@@ -1,42 +1,25 @@
-ifndef OS # linux
-EXECUTABLE_EXTENSION=.exe
-LIBRARY_EXTENSION=.a
-RM=rm -f $(1)
-else ifeq ($(OS), Windows_NT) # windows
-EXECUTABLE_EXTENSION=
-LIBRARY_EXTENSION=.lib
-RM=if exist $(1) del $(1)
-else
-$(error os not supported)
-endif
+include makefile_mini.mk
 
 
-libtest-mini$(LIBRARY_EXTENSION): test_mini.o
-	$(call RM,libtest-mini$(LIBRARY_EXTENSION))
-	ar rcs libtest-mini$(LIBRARY_EXTENSION) test_mini.o
+$(call mm_start_parameters_t,a)
+a.ignoredbinaries:=^test$(MM_EXECUTABLE_EXTENSION)$$
+$(call mm_start,a)
 
-test_mini.o: test_mini.c
-	gcc -c test_mini.c
+$(call mm_add_library_parameters_t,b)
+b.filetypes:=EMMLibraryfiletype_Static
+b.c:=test_mini.c
+b.h:=test_mini.h
+$(call mm_add_library,test-mini,b)
 
-test$(EXECUTABLE_EXTENSION): test.o libtest-mini$(LIBRARY_EXTENSION)
-	gcc -Wl,--wrap=malloc,--wrap=free,--wrap=main -o test$(EXECUTABLE_EXTENSION) test.o -L./ -ltest-mini
+$(call mm_add_executable_parameters_t,c)
+c.c:=test.c
+c.gccOrG++:=-Wl,--wrap=malloc,--wrap=free,--wrap=main
+c.libraries:=test-mini
+$(call mm_add_executable,test,c)
 
-test.o: test.c
-	gcc -c test.c
+$(call mm_add_test_parameters_t,d)
+d.executables:=test
+$(call mm_add_test,test,d)
 
-#******************************************************************************
-
-release: test$(EXECUTABLE_EXTENSION)
-	./test$(EXECUTABLE_EXTENSION)
-
-# don't associate clean with a file with filename "clean"
-# v
-.PHONY: clean
-clean:
-	$(call RM,test_mini.o)
-	$(call RM,libtest-mini.a)
-	$(call RM,libtest-mini.lib)
-	
-	$(call RM,test.o)
-	$(call RM,test)
-	$(call RM,test.exe)
+$(call mm_stop_parameters_t,e)
+$(call mm_stop,e)
