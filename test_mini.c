@@ -4,7 +4,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// NOTE: https://sourceforge.net/p/predef/wiki/Compilers/#microsoft-visual-c
+#if defined(_WIN32)
+// either _MSC_VER or __MINGW32__
+#elif defined(__linux__) //< chromeos
+// always __GNUC__
+#else
+#error "os not supported"
+#endif
 
+
+#ifndef _MSC_VER
 struct info_about_memory_allocation_t
 {
 	void* a;
@@ -100,6 +110,7 @@ void __wrap_free(void* a)
 
 	__real_free(a);
 }
+#endif
 
 //*****************************************************************************
 
@@ -111,12 +122,15 @@ int tm_test(int a, int(*b)(), int numRepetitions)
 	int i;
 	for(i = 0; i < 1 + numRepetitions; ++i)
 	{
+#ifndef _MSC_VER
 		size_t numBytesAllocatedBeforeTest = numBytesAllocated;
+#endif
 		c = b();
 		if(c != 1)
 		{
 			break;
 		}
+#ifndef _MSC_VER
 		size_t numBytesAllocatedAfterTest = numBytesAllocated;
 		size_t numBytesLeakedByTest = numBytesAllocatedAfterTest - numBytesAllocatedBeforeTest;
 		if(numBytesAllocatedAfterTest != numBytesAllocatedBeforeTest)
@@ -124,6 +138,7 @@ int tm_test(int a, int(*b)(), int numRepetitions)
 			fprintf(stderr, "error: test %i leaked %zi bytes of memory %i%s time\n", a, numBytesLeakedByTest, i + 1, TM_ORDINAL_NUMBER_SUFFIX(i+1));
 			return 0;
 		}
+#endif
 	}
 	if(c != 1)
 	{
@@ -136,6 +151,7 @@ int tm_test(int a, int(*b)(), int numRepetitions)
 	return 1;
 }
 
+#ifndef _MSC_VER
 int __real_main(int argc, char** argv);
 //extern int tm_main();
 int __wrap_main(int argc, char** argv)
@@ -159,3 +175,4 @@ int __wrap_main(int argc, char** argv)
 
 	return 0;
 }
+#endif

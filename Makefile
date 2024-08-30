@@ -1,29 +1,14 @@
-ifndef OS # linux
-EXECUTABLE_EXTENSION=.exe
-LIBRARY_EXTENSION=.a
-RM=rm -f $(1)
-else ifeq ($(OS), Windows_NT) # windows
-EXECUTABLE_EXTENSION=
-LIBRARY_EXTENSION=.lib
-RM=if exist $(1) del $(1)
-else
-$(error os not supported)
-endif
+include makefile_mini.mk
 
 
-libtest-mini$(LIBRARY_EXTENSION): test_mini.o
-	$(call RM,libtest-mini$(LIBRARY_EXTENSION))
-	ar rcs libtest-mini$(LIBRARY_EXTENSION) test_mini.o
+$(call mm_start_parameters_t,a)
+$(call mm_start,a)
 
-test_mini.o: test_mini.c
-	gcc -c test_mini.c
+$(call mm_add_library_parameters_t,b)
+b.filetypes:=EMMLibraryfiletype_Static
+b.c:=test_mini.c
+b.h:=test_mini.h
+$(call mm_add_library,test-mini,b)
 
-#******************************************************************************
-
-# don't associate clean with a file with filename "clean"
-# v
-.PHONY: clean
-clean:
-	$(call RM,test_mini.o)
-	$(call RM,libtest-mini.a)
-	$(call RM,libtest-mini.lib)
+$(call mm_stop_parameters_t,e)
+$(call mm_stop,e)
